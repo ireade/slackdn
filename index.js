@@ -225,6 +225,12 @@ controller.hears(["hi", "hello", "hey"], ["mention", "direct_mention", "direct_m
     bot.reply(message, reply);
 })
 
+controller.hears(["thank you", "thanks"], ["mention", "direct_mention", "direct_message"], function(bot, message) {
+
+    var reply = "You're welcome :)";
+    bot.reply(message, reply);
+})
+
 
 controller.hears("help", ["mention", "direct_mention", "direct_message"], function(bot, message) {
 
