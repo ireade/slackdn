@@ -148,13 +148,13 @@ function makeRequest(bot, message, replyTitle, requestUrl) {
             attachments.push(storyAttachment);
         }
         
-        var obj = {
+        var reply = {
             username: botName,
             "text": replyTitle,
             "attachments": attachments
         };
 
-        bot.reply(message, obj);
+        bot.reply(message, reply);
     })
 
 }
@@ -195,13 +195,13 @@ function getRandomStory(bot, message) {
         attachments.push(storyAttachment);
 
 
-        var obj = {
+        var reply = {
             username: botName,
             "text": "Random Story",
             "attachments": attachments
         };
 
-        bot.reply(message, obj);
+        bot.reply(message, reply);
 
     })
 
@@ -217,6 +217,13 @@ function getRandomStory(bot, message) {
   CONTROLLER LISTENERS
 
 ********************** */
+
+
+controller.hears(["hi", "hello", "hey"], ["mention", "direct_mention", "direct_message"], function(bot, message) {
+
+    var reply = "Hello :) Looking for some stories?";
+    bot.reply(message, reply);
+})
 
 
 controller.hears("help", ["mention", "direct_mention", "direct_message"], function(bot, message) {
