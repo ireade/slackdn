@@ -1,8 +1,8 @@
 {
-  "name": "debugbot",
+  "name": "designernewsbot",
   "author": "Ire Aderinokun",
   "version": "1.0.0",
-  "description": "Better bug reporting",
+  "description": "Get Stories from Designer News Directly to Slack",
   "main": "index.js",
   "scripts": {
     "test": "console.log('no test');",
@@ -10,6 +10,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "beepboop-botkit": "0.0.5",
     "botkit": "0.0.5"
   },
   "engines": {
