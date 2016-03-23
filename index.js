@@ -28,7 +28,6 @@ controller.spawn({
 
 ********************** */
 
-var botName = "designernewsbot";
 var topStoriesReuqestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2F&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey=59cf7cce4fdd4a7fbe6f630574c6d814abab1e75fbbde6cf59de38356992b106d481a5277e31e78ee98026babe24c5dfe561b854cb2bbeb5459e0aaffc4370e6b656b0ed4e47ee26c417c3672d28d410';
 var newStoriesReuqestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2Fnew&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey=59cf7cce4fdd4a7fbe6f630574c6d814abab1e75fbbde6cf59de38356992b106d481a5277e31e78ee98026babe24c5dfe561b854cb2bbeb5459e0aaffc4370e6b656b0ed4e47ee26c417c3672d28d410';
 var discussionsRequestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2Fdiscussions&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey=59cf7cce4fdd4a7fbe6f630574c6d814abab1e75fbbde6cf59de38356992b106d481a5277e31e78ee98026babe24c5dfe561b854cb2bbeb5459e0aaffc4370e6b656b0ed4e47ee26c417c3672d28d410';
@@ -40,6 +39,28 @@ var discussionsRequestURL = 'https://api.import.io/store/connector/_magic?url=ht
   FUNCTIONS
 
 ********************** */
+
+
+var handleError = function(err, bot, message) {
+    var reply = {
+        "text": "Oops! Looks like there was an error! :sob:",
+        "attachments": [
+            {
+                "title": "Error",
+                "color": "danger",
+                "text": err
+            },
+            {
+                "title": "Report this error",
+                "color": "#000",
+                "text": ":email: ire@ireaderinokun.com \n :bird: <http://twitter.com/ireaderinokun|@ireaderinokun>"
+            
+            }
+        ]
+    };
+
+    bot.reply(message, reply);
+}
 
 
 var getStories = function(url, callback) {
@@ -124,7 +145,14 @@ var getStoryAttachment = function(story) {
 
 function makeRequest(bot, message, replyTitle, requestUrl) {
 
+    var loaded = false;
     bot.reply(message, "Fetching " + replyTitle + "...");
+
+    setTimeout(function () {
+        if ( !loaded ) {
+            bot.reply(message, "Sorry, things a taking a bit longer than usual. I'm still working on getting your stories though!");
+        }
+    }, 5000)
 
 
     var count = message.text.split(" ")[1];
@@ -136,9 +164,12 @@ function makeRequest(bot, message, replyTitle, requestUrl) {
 
 
     getStories(requestUrl, function(stories, err) {
+        loaded = true;
         if ( err ) {
-            bot.reply(message, err);
+            handleError(err, bot, message);
         }
+
+        console.log(loaded);
 
         var attachments = [];
         var numberOfStories = count ? count++ : 8;
@@ -149,7 +180,6 @@ function makeRequest(bot, message, replyTitle, requestUrl) {
         }
         
         var reply = {
-            username: botName,
             "text": replyTitle,
             "attachments": attachments
         };
@@ -185,7 +215,7 @@ function getRandomStory(bot, message) {
     getStories(requestUrl, function(stories, err) {
 
         if ( err ) {
-            bot.reply(message, err);
+            handleError(err, bot, message);
         }
 
         var attachments = [];
@@ -196,7 +226,6 @@ function getRandomStory(bot, message) {
 
 
         var reply = {
-            username: botName,
             "text": "Random Story",
             "attachments": attachments
         };
@@ -218,30 +247,31 @@ function getRandomStory(bot, message) {
 
 ********************** */
 
+var contexts = ["mention", "direct_mention", "direct_message"];
 
-controller.hears(["hi", "hello", "hey"], ["mention", "direct_mention", "direct_message"], function(bot, message) {
 
-    var reply = "Hello! I'm designernewsbot :) Looking for some stories? Try saying `top`";
+controller.hears(["hi", "hello", "hey"], contexts, function(bot, message) {
+
+    var reply = "Hello! I'm a bot for Designer News :robot_face: \n Looking for some stories? Try saying `top` to fetch the top stories, or say `help` for more information on commands I understand.";
     bot.reply(message, reply);
 })
 
-controller.hears(["thank you", "thanks"], ["mention", "direct_mention", "direct_message"], function(bot, message) {
+controller.hears(["thank you", "thanks"], contexts, function(bot, message) {
 
-    var reply = "You're welcome :)";
+    var reply = "You're welcome :simple_smile:";
     bot.reply(message, reply);
 })
 
 
-controller.hears("help", ["mention", "direct_mention", "direct_message"], function(bot, message) {
+controller.hears("help", contexts, function(bot, message) {
 
     var reply = {
-        username: botName,
         "text": "Hi there! Here are some commands you can use with me",
         "attachments": [
             {
                 "title": "<list> <number of stories>",
                 "color": "#2d72d9",
-                "text": "Pulls stories from a certain list. \n The list can be either 'top', 'recent', or 'discussions' \n Optionally set the number of stories to pull \n For example, 'recent 5' or just 'recent'"
+                "text": "Pulls stories from a certain list. \n The list can be either `top`, `recent`, or `discussions` \n Optionally set the number of stories to pull \n For example, `recent 5` or just `recent`"
             },
             {
                 "title": "random",
@@ -257,71 +287,54 @@ controller.hears("help", ["mention", "direct_mention", "direct_message"], functi
         ]
     };
 
+
+    bot.reply(message, reply);
+})
+
+
+controller.hears(["feedback"], contexts, function(bot, message) {
+
+    var reply = {
+        "attachments": [
+            {
+                "title": "This bot was made with :heart: by <http://twitter.com/ireaderinokun|Ire Aderinokun> :grimacing:",
+                "color": "#2d72d9",
+                "text": "If you want to send feedback about this bot, you can contact me through any of these mediums - \n :email: ire@ireaderinokun.com \n :bird: <http://twitter.com/ireaderinokun|@ireaderinokun>"
+            
+            },
+            {
+                "title": "Stories from <http://designernews.co|Designer News>",
+                "color": "#2d72d9",
+                "text": "Designer News is a community of people in design and technology. Launched on Dec 31, 2012 as a place to discuss and share interesting things in our industry."
+            }
+        ]
+    };
+
     bot.reply(message, reply);
 })
 
 
 
+
+
+/* */
+
+controller.hears(["top"], contexts, function(bot, message) {
+    makeRequest(bot, message, "Top Stories", topStoriesReuqestURL); 
+})
+controller.hears(["recent"], contexts, function(bot, message) {
+    makeRequest(bot, message, "Recent Stories", newStoriesReuqestURL);
+})
+controller.hears(["discussions", "discussion"], contexts, function(bot, message) {
+    makeRequest(bot, message, "Discussions", discussionsRequestURL);
+})
+
+
 controller.on("direct_mention", function(bot, message) {
-
-    var messageText = message.text.toLowerCase();
-
-    if ( messageText.indexOf('feedback') > -1 ) {
-
-        var reply = {
-            username: botName,
-            "attachments": [
-                {
-                    "title": "This bot was made with :heart: by <http://twitter.com/ireaderinokun|Ire Aderinokun> :grimacing:",
-                    "color": "#2d72d9",
-                    "text": "If you want to send feedback about this bot, you can contact me through any of these mediums - \n :email: ire@ireaderinokun.com \n :bird: <http://twitter.com/ireaderinokun|@ireaderinokun>"
-                
-                },
-                {
-                    "title": "Stories from <http://designernews.co|Designer News>",
-                    "color": "#2d72d9",
-                    "text": "Designer News is a community of people in design and technology. Launched on Dec 31, 2012 as a place to discuss and share interesting things in our industry."
-                }
-            ]
-        };
-
-        bot.reply(message, reply);
-    }
-
-    else if ( messageText.indexOf('random') > -1 ) {
-        getRandomStory(bot, message);
-    } 
-    else if ( messageText.indexOf('top') > -1 ) {
-        makeRequest(bot, message, "Top Stories", topStoriesReuqestURL); 
-    } else if ( messageText.indexOf('recent') > -1 ) {
-        makeRequest(bot, message, "Recent Stories", newStoriesReuqestURL);
-    } else if ( messageText.indexOf('discussions') > -1 ) {
-        makeRequest(bot, message, "Discussions", discussionsRequestURL);
-    }  
-
-
-    else {
-        bot.reply(message, "Sorry I didn't get that, say `help` if you need help.");
-    }
-
+    bot.reply(message, "Sorry I didn't get that, say `help` if you need help.");
 });
-
 controller.on("direct_message", function(bot, message) {
-
-    var messageText = message.text.toLowerCase();
-
-    if ( messageText.indexOf('random') > -1 ) {
-        getRandomStory(bot, message);
-    } else if ( messageText.indexOf('top') > -1 ) {
-        makeRequest(bot, message, "Top Stories", topStoriesReuqestURL); 
-    } else if ( messageText.indexOf('recent') > -1 ) {
-        makeRequest(bot, message, "Recent Stories", newStoriesReuqestURL);
-    } else if ( messageText.indexOf('discussions') > -1 ) {
-        makeRequest(bot, message, "Discussions", discussionsRequestURL);
-    }  else {
-        bot.reply(message, "Sorry I didn't get that, say `help` if you need help.");
-    }
-
+    bot.reply(message, "Sorry I didn't get that, say `help` if you need help.");
 });
 
 
