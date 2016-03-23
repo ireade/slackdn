@@ -193,7 +193,7 @@ function makeRequest(bot, message, replyTitle, requestUrl) {
 
 function getRandomStory(bot, message) {
 
-    bot.reply(message, "Fetching a random story...");
+    bot.reply(message, "Feeling lucky are we? :four_leaf_clover: Fetching a random story...");
 
     var requestUrl;
     var r = Math.floor(Math.random() * 3);
@@ -219,11 +219,9 @@ function getRandomStory(bot, message) {
         }
 
         var attachments = [];
-
         var index = Math.floor(Math.random() * stories.length);
         var storyAttachment = getStoryAttachment(stories[index]);
         attachments.push(storyAttachment);
-
 
         var reply = {
             "text": "Random Story",
@@ -327,6 +325,9 @@ controller.hears(["recent"], contexts, function(bot, message) {
 })
 controller.hears(["discussions", "discussion"], contexts, function(bot, message) {
     makeRequest(bot, message, "Discussions", discussionsRequestURL);
+})
+controller.hears(["random"], contexts, function(bot, message) {
+    getRandomStory(bot, message);
 })
 
 
