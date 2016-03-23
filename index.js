@@ -221,7 +221,7 @@ function getRandomStory(bot, message) {
 
 controller.hears(["hi", "hello", "hey"], ["mention", "direct_mention", "direct_message"], function(bot, message) {
 
-    var reply = "Hello :) Looking for some stories?";
+    var reply = "Hello! I'm designernewsbot :) Looking for some stories? Try saying `top`";
     bot.reply(message, reply);
 })
 
