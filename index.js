@@ -133,7 +133,7 @@ var getStoryAttachment = function(story) {
         "title": title,
         "title_link": storyLink,
         "color": attachmentColour,
-        "text": ":speech_balloon: <"+commentsLink+"|"+comments+"> :clock8: " + storyDate + " :smiley: from <"+posterLink+"|"+poster+">"
+        "text": ":zap: "+votes+" votes :speech_balloon: <"+commentsLink+"|"+comments+"> :clock8: " + storyDate + " :smiley: from <"+posterLink+"|"+poster+">"
     }
 
     return attachment;
