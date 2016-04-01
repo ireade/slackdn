@@ -1,7 +1,7 @@
 {
   "name": "designernewsbot",
   "author": "Ire Aderinokun",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Get Stories from Designer News Directly to Slack",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,8 @@
   },
   "license": "ISC",
   "dependencies": {
-    "beepboop-botkit": "0.0.5",
-    "botkit": "0.0.5"
+    "beepboop-botkit": "^1.1.1",
+    "botkit": "0.0.14"
   },
   "engines": {
     "node": "4.2.3"

@@ -1,23 +1,27 @@
 var Botkit = require("botkit");
 var https = require("https");
+var beepboop = require("beepboop-botkit");
 
 var token = process.env.SLACK_TOKEN
-if (!token) {
-  console.error('SLACK_TOKEN is required!')
-  process.exit(1)
-}
 
 var controller = Botkit.slackbot({
   debug: false
 });
 
-controller.spawn({
-  token: token
-}).startRTM(function(err,bot,payload) {
-  if (err) {
-    throw new Error(err);
-  }
-});
+if (token) {
+  console.log("Starting in single-team mode")
+  controller.spawn({
+    token: token
+  }).startRTM(function(err,bot,payload) {
+    if (err) {
+      throw new Error(err);
+    }
+  });
+} else {
+  console.log("Starting in Beep Boop multi-team mode")
+  require('beepboop-botkit').start(controller, { debug: true })
+}
+
 
 
 
@@ -169,7 +173,7 @@ function makeRequest(bot, message, replyTitle, requestUrl) {
             handleError(err, bot, message);
         }
 
-        console.log(loaded);
+        console.log(stories);
 
         var attachments = [];
         var numberOfStories = count ? count++ : 8;
