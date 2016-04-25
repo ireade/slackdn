@@ -3,6 +3,7 @@ var https = require("https");
 var beepboop = require("beepboop-botkit");
 
 var token = process.env.SLACK_TOKEN
+var importAPIKey = process.env.IMPORT_API_KEY
 
 var controller = Botkit.slackbot({
   debug: false
@@ -22,7 +23,9 @@ if (token) {
   require('beepboop-botkit').start(controller, { debug: true })
 }
 
-
+if ( !importAPIKey ) {
+    throw new Error("Import.io API Key required");
+}
 
 
 
@@ -32,9 +35,9 @@ if (token) {
 
 ********************** */
 
-var topStoriesReuqestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2F&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey=59cf7cce4fdd4a7fbe6f630574c6d814abab1e75fbbde6cf59de38356992b106d481a5277e31e78ee98026babe24c5dfe561b854cb2bbeb5459e0aaffc4370e6b656b0ed4e47ee26c417c3672d28d410';
-var newStoriesReuqestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2Fnew&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey=59cf7cce4fdd4a7fbe6f630574c6d814abab1e75fbbde6cf59de38356992b106d481a5277e31e78ee98026babe24c5dfe561b854cb2bbeb5459e0aaffc4370e6b656b0ed4e47ee26c417c3672d28d410';
-var discussionsRequestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2Fdiscussions&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey=59cf7cce4fdd4a7fbe6f630574c6d814abab1e75fbbde6cf59de38356992b106d481a5277e31e78ee98026babe24c5dfe561b854cb2bbeb5459e0aaffc4370e6b656b0ed4e47ee26c417c3672d28d410';
+var topStoriesReuqestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2F&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey='+importAPIKey;
+var newStoriesReuqestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2Fnew&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey='+importAPIKey;
+var discussionsRequestURL = 'https://api.import.io/store/connector/_magic?url=https%3A%2F%2Fwww.designernews.co%2Fdiscussions&js=false&_user=59cf7cce-4fdd-4a7f-be6f-630574c6d814&_apikey='+importAPIKey;
 
 
 
@@ -152,12 +155,6 @@ function makeRequest(bot, message, replyTitle, requestUrl) {
     var loaded = false;
     bot.reply(message, "Fetching " + replyTitle + "...");
 
-    setTimeout(function () {
-        if ( !loaded ) {
-            bot.reply(message, "Sorry, things a taking a bit longer than usual. I'm still working on getting your stories though!");
-        }
-    }, 5000)
-
 
     var count = message.text.split(" ")[1];
     if ( count ) {
@@ -168,12 +165,8 @@ function makeRequest(bot, message, replyTitle, requestUrl) {
 
 
     getStories(requestUrl, function(stories, err) {
-        loaded = true;
-        if ( err ) {
-            handleError(err, bot, message);
-        }
 
-        console.log(stories);
+        if ( err ) { handleError(err, bot, message) }
 
         var attachments = [];
         var numberOfStories = count ? count++ : 8;

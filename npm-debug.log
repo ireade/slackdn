@@ -1,5 +1,5 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'run', 'start' ]
 2 info using npm@2.14.20
 3 info using node@v4.4.0
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
@@ -19,8 +19,8 @@
 9 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
 10 verbose pkgid designernewsbot@1.2.0
 11 verbose cwd /Users/ireaderinokun/www/3. Products/slackdn
-12 error Darwin 15.2.0
-13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+12 error Darwin 15.4.0
+13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "start"
 14 error node v4.4.0
 15 error npm  v2.14.20
 16 error code ELIFECYCLE

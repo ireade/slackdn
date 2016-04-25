@@ -1,3 +1,8 @@
 name: designernewsbot
 description: "Get Stories from Designer News Directly to Slack. Click the button below to launch in your Slack Team"
 avatar: resources/avatar.png
+config:
+  - name: IMPORT_API_KEY
+    friendly_name: Import.io API Key
+    global: true
+    type: secret
