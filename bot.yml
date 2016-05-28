@@ -1,5 +1,5 @@
 name: designernewsbot
-description: "Get Stories from Designer News Directly to Slack. Click the button below to launch in your Slack Team"
+description: "Get Stories from Designer News Directly to Slack. Click the button below to launch in your Slack Team \n \n Once @designernewsbot is installed, initiate a conversation with it in a private direct message to get started. If you're unsure what to say, just say 'hi' :)"
 avatar: resources/avatar.png
 config:
   - name: IMPORT_API_KEY
