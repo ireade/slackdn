@@ -6,7 +6,7 @@ config:
     friendly_name: Import.io API Key
     global: true
     type: secret
-  - name: DASHBOT_KEY
+  - name: DASHBOT_API_KEY
     friendly_name: Dashbot Key
     global: true
     type: secret
