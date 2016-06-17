@@ -1,9 +1,11 @@
-var Botkit = require("botkit");
-var https = require("https");
-var beepboop = require("beepboop-botkit");
+var Botkit = require('botkit');
+var https = require('https');
+var beepboop = require('beepboop-botkit');
+var dashbot = require('dashbot');
 
-var token = process.env.SLACK_TOKEN
-var importAPIKey = process.env.IMPORT_API_KEY
+var token = process.env.SLACK_TOKEN;
+var importAPIKey = process.env.IMPORT_API_KEY;
+//var dashbotKey = process.env.DASHBOT_KEY;
 
 var controller = Botkit.slackbot({
   debug: false
@@ -26,6 +28,8 @@ if (token) {
 if ( !importAPIKey ) {
     throw new Error("Import.io API Key required");
 }
+
+//var dashbot = require('dashbot')(dashbotKey).facebook;
 
 
 

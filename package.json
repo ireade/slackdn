@@ -11,11 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "beepboop-botkit": "^1.1.1",
-    "botkit": "0.0.14"
+    "botkit": "0.0.14",
+    "dashbot": "^0.6.1"
   },
   "engines": {
     "node": "4.2.3"
   }
 }
-
-
