@@ -138,7 +138,7 @@ var getStoryAttachment = function(story) {
     var storyDate = story['storytimeago_value'];
     var comments = story['commentcount_link/_text'];
     var commentsLink = story['commentcount_link'];
-    var votes = story['storyvoteis_number'][0];
+    var votes = (story['storyvoteis_number'] && story['storyvoteis_number'][0]) || 0;
     var attachmentColour = getAttachmentColour(title);
 
     var attachment = {
